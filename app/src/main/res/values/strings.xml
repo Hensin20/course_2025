@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Project1</string>
+    <string name="textView_login">Авторизація</string>
+    <string name="textView_registration">Реєстрація</string>
+    <string name="TextPhone_1">Введіть номер телефону</string>
+    <string name="TextPassword_1">Введіть пароль </string>
+    <string name="TextPassword_2">Введіть повторно пороль </string>
+    <string name="Button_login">Увійти </string>
+    <string name="Button_registration">Зареєструватися </string>
+    <string name="imeg_button_tack">Задачі </string>
+    <string name="imeg_button_shedule">Розклад </string>
+    <string name="imeg_button_profile">Профіль </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
+

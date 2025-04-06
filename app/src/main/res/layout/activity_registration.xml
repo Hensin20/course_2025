@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_registration">
+
+    <Button
+        android:id="@+id/button_registration2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/Button_registration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_registration2" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword_registration"
+        android:layout_width="247dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="@string/TextPassword_1"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColorHint="@color/Gray_Chateau"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPhone_registration" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword_registration2"
+        android:layout_width="247dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="@string/TextPassword_2"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColorHint="@color/Gray_Chateau"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_registration" />
+
+    <EditText
+        android:id="@+id/editTextPhone_registration"
+        android:layout_width="247dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="@string/TextPhone_1"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        android:singleLine="true"
+        android:textColorHint="@color/Gray_Chateau"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_registration" />
+
+    <TextView
+        android:id="@+id/textView_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="@string/textView_registration"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
