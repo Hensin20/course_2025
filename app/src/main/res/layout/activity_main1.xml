@@ -12,7 +12,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="740dp"
+        android:layout_height="700dp"
         android:background="@drawable/rounded_view"
         android:elevation="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -23,7 +23,7 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="740dp"
+        android:layout_height="700dp"
         android:elevation="9dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +78,7 @@
         android:layout_marginTop="32dp"
         android:background="@color/Blue"
         android:src="@drawable/ic_additionally"
+        android:contentDescription="@string/imag_button_additionally"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
