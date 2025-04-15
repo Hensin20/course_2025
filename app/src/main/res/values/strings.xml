@@ -11,6 +11,9 @@
     <string name="imeg_button_shedule">Розклад </string>
     <string name="imeg_button_profile">Профіль </string>
     <string name="imag_button_additionally">Додатково </string>
+    <string name="ic_plus">Додати </string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
