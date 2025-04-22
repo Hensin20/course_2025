@@ -5,4 +5,14 @@
     <color name="Gray_Chateau">#9ba3a6</color>
     <color name="Blue">#88BEEB</color>
     <color name="Button_main">#749BED</color>
+    <color name="view_profile">#E6F1FA</color>
+    <color name="view_profile_stroke">#4477D4</color>
+
+
+    //Графік
+    <color name="Green_good">#00D26A</color>
+    <color name="Blue_norm">#2ABDF4</color>
+    <color name="Gold_record">#F3A23A</color>
+
+
 </resources>

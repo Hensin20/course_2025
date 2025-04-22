@@ -3,7 +3,6 @@ package com.example.project1;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +17,7 @@ public class activity_main_1 extends AppCompatActivity {
 
     private ImageButton img_btn_calendar, img_btn_tack, img_btn_user;
     Fragment_calendar fragment_calendar = new Fragment_calendar();
+    Fragment_profile fragment_profile = new Fragment_profile();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,6 +46,10 @@ public class activity_main_1 extends AppCompatActivity {
 
         });
 
+        img_btn_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { setNewFragment(fragment_profile); }
+        });
     }
 
     private void setNewFragment(Fragment fragment) {
