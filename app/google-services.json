@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "190143992197",
+    "project_id": "trailpixel-84020",
+    "storage_bucket": "trailpixel-84020.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190143992197:android:f7e50d7f78ce8dbb6bf4ec",
+        "android_client_info": {
+          "package_name": "com.example.project1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbhU-etSzIolK2x0x-YgjPmrAU_CVNbGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

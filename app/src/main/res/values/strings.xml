@@ -12,6 +12,9 @@
     <string name="imeg_button_profile">Профіль </string>
     <string name="imag_button_additionally">Додатково </string>
     <string name="ic_plus">Додати </string>
+    <string name="texView_running">Кроки</string>
+    <string name="texView_calories">Калорії</string>
+    <string name="texView_distance">Відстань</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
