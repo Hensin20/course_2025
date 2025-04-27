@@ -17,7 +17,7 @@
             android:layout_marginStart="10dp"
 
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="452dp"
+            android:layout_marginBottom="432dp"
             android:background="@drawable/rounded_view_profile"
 
             android:elevation="8dp"
@@ -70,6 +70,7 @@
             android:layout_marginTop="10dp"
             android:elevation="10dp"
             android:src="@drawable/icon_running"
+            android:contentDescription="@string/texView_running"
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toTopOf="@+id/view2" />
 
@@ -87,6 +88,19 @@
             app:layout_constraintEnd_toEndOf="@+id/imageView4" />
 
 
+        <TextView
+            android:id="@+id/textView_running_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="29dp"
+            android:gravity="center"
+            android:text="@string/textView_dynamic_count"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="@+id/imageView4"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="60dp"
@@ -94,6 +108,7 @@
             android:layout_marginTop="10dp"
             android:elevation="10dp"
             android:src="@drawable/icon_calories"
+            android:contentDescription="@string/texView_calories"
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="@+id/view2"
@@ -112,6 +127,19 @@
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="@+id/imageView" />
 
+        <TextView
+            android:id="@+id/textView_calories_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="29dp"
+            android:gravity="center"
+            android:text="@string/textView_dynamic_count"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="60dp"
@@ -120,6 +148,7 @@
             android:layout_marginEnd="30dp"
             android:elevation="10dp"
             android:src="@drawable/icon_distance"
+            android:contentDescription="@string/texView_distance"
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintTop_toTopOf="@+id/view2" />
 
@@ -135,6 +164,84 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView5"
             app:layout_constraintStart_toStartOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="@+id/imageView5" />
+
+        <TextView
+            android:id="@+id/textView_distance_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="29dp"
+            android:gravity="center"
+            android:text="@string/textView_dynamic_count"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/white"
+            android:contentDescription="@string/img_button_quality"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_quality"
+            app:layout_constraintBottom_toTopOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/img_button_quality"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+            app:layout_constraintStart_toStartOf="@+id/imageButton2"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="35dp"
+            android:background="@color/white"
+            android:contentDescription="@string/img_button_statistics"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_statistics"
+            app:layout_constraintBottom_toTopOf="@+id/view2"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/img_button_statistics"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imageButton3"
+            app:layout_constraintStart_toStartOf="@+id/imageButton3"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="32dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_profile"
+            android:contentDescription="@string/imeg_button_profile"
+            app:layout_constraintBottom_toTopOf="@+id/view2"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+            app:layout_constraintStart_toEndOf="@+id/imageButton2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,13 @@
 package com.example.project1;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-
+import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -11,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,13 +24,19 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.snackbar.Snackbar;
 
 
 import java.util.ArrayList;
 
-public class Fragment_profile extends Fragment {
+public class Fragment_profile extends Fragment implements SensorEventListener {
 
     private BarChart barChart;
+    private SensorManager sensorManager;
+    private Sensor runningSensor;
+    private TextView textView_running, textView_calories, textView_distance;
+    private boolean isSensorAvailable;
+    private float runningAtStart = 0;
 
     @Nullable
     @Override
@@ -33,11 +45,25 @@ public class Fragment_profile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragmen_profile, container, false);
 
         barChart = view.findViewById(R.id.barChart);
+        textView_running = view.findViewById(R.id.textView_running_count);
+        textView_calories = view.findViewById(R.id.textView_calories_count);
+        textView_distance = view.findViewById(R.id.textView_distance_count);
+
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        isSensorAvailable = (runningSensor != null);
+
+        if (!isSensorAvailable) {
+            // Відкладаємо показ Snackbar до завершення створення View
+            view.post(() -> Snackbar.make(view, "Датчик кроків не знайдено!", Snackbar.LENGTH_LONG).show());
+        }
 
         setupChart(stepsPerDay); // Створюємо графік
 
         return view;
     }
+
+
+
     int[] stepsPerDay = {5000, 7000, 4000, 8000, 6000, 3000, 10000};
     private void setupChart(int [] stepsPerDay) {
 
@@ -109,5 +135,33 @@ public class Fragment_profile extends Fragment {
         barChart.invalidate();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isSensorAvailable) {
+            sensorManager.registerListener(this, runningSensor, SensorManager.SENSOR_DELAY_UI);
+        }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (isSensorAvailable) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(runningAtStart == 0){
+            runningAtStart = event.values[0];
+        }
+        int currentRunning = (int) (event.values[0] - runningAtStart);
+        textView_running.setText(currentRunning);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Це можна залишити пустим, якщо не потрібно
+    }
 }

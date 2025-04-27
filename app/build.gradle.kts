@@ -43,6 +43,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
 
     implementation("com.google.firebase:firebase-analytics:21.5.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
