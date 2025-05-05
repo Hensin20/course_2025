@@ -9,111 +9,122 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import okhttp3.*;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextPhone_login, editTextTextPassword_login;
-    private TextView textView_hint;
     private Button button_login;
-
-
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
-
         });
+
         editTextPhone_login = findViewById(R.id.editTextPhone_login);
         editTextTextPassword_login = findViewById(R.id.editTextTextPassword_login);
         button_login = findViewById(R.id.button_login);
 
+        // Перевірка номера
         editTextPhone_login.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable s) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String phone = s.toString();
-            if(isValidPhoneNumber(phone)){
-                editTextPhone_login.setError(null);
-            }
-            else{
-                editTextPhone_login.setError("Невірний формат номера");
-            }
+                if (isValidPhoneNumber(s.toString())) {
+                    editTextPhone_login.setError(null);
+                } else {
+                    editTextPhone_login.setError("Невірний формат номера");
+                }
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-            public boolean isValidPhoneNumber(String phone){
+            private boolean isValidPhoneNumber(String phone) {
                 String phonePattern = "^(\\+?38)?0\\d{9}$";
                 return phone.matches(phonePattern);
             }
         });
 
+        // Перевірка пароля
         editTextTextPassword_login.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable s) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String password = s.toString();
-                if(isValidPassword(password)){
+                if (s.length() >= 6) {
                     editTextTextPassword_login.setError(null);
+                } else {
+                    editTextTextPassword_login.setError("Пароль має містити мінімум 6 символів");
                 }
-                else{
-                    editTextTextPassword_login.setError("Пароль має містити: мінімум 6 символів");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-            public boolean isValidPassword(String password){
-                String passwordPattern = ".{6,}";
-                return password.matches(passwordPattern);
             }
         });
 
+        // Кнопка входу
+        button_login.setOnClickListener(v -> {
+            String phone = editTextPhone_login.getText().toString();
+            String password = editTextTextPassword_login.getText().toString();
 
-        button_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String phone = editTextPhone_login.getText().toString();
-                String password = editTextTextPassword_login.getText().toString();
-                if(TextUtils.isEmpty((phone))){
-                    editTextPhone_login.setError("Введіть номер телефону");
-                }
-                if(TextUtils.isEmpty(password)){
-                    editTextTextPassword_login.setError("Введіть пароль");
-                }
-                Intent intent = new Intent(MainActivity.this, activity_main_1.class);
-                startActivity(intent);
+            if (TextUtils.isEmpty(phone)) {
+                editTextPhone_login.setError("Введіть номер телефону");
+                return;
             }
-        });
 
+            if (TextUtils.isEmpty(password)) {
+                editTextTextPassword_login.setError("Введіть пароль");
+                return;
+            }
+
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            String json = "{\"phoneNumber\":\"" + phone + "\",\"password\":\"" + password + "\"}";
+
+            RequestBody body = RequestBody.create(json, JSON);
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:5000/api/auth/login")// для емулятора
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Вхід успішний!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, activity_main_1.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Невірні дані", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    runOnUiThread(() ->
+                            Toast.makeText(MainActivity.this, "Помилка підключення", Toast.LENGTH_SHORT).show()
+                    );
+                }
+            });
+        });
     }
-    public void button_registration (View v){
-        Intent intent = new Intent(this,Activity_registration.class);
+
+    // Кнопка для переходу на екран реєстрації
+    public void button_registration(View v) {
+        Intent intent = new Intent(this, Activity_registration.class);
         startActivity(intent);
     }
 }

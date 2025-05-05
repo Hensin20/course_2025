@@ -37,7 +37,6 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     private BarChart barChart;
     private SensorManager sensorManager = null;
     private Sensor stepSensor;
-    private int totalStep = 0;
     private int praviewsTotalStep = 0;
     private TextView textView_steps, textView_calories, textView_distance;
 
