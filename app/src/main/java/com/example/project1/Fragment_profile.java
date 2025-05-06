@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.PixelCopy;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,9 +30,23 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.security.auth.callback.Callback;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Fragment_profile extends Fragment implements SensorEventListener {
 
@@ -39,6 +55,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     private Sensor stepSensor;
     private int praviewsTotalStep = 0;
     private TextView textView_steps, textView_calories, textView_distance;
+
 
     @Nullable
     @Override
@@ -55,84 +72,11 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
+        int[] stepsPerDay = {5000, 7000, 4000, 8000, 6000, 3000, 10000};
 
-
-        setupChart(stepsPerDay); // Створюємо графік
+        SetupChart.setupChart(barChart,requireContext(),stepsPerDay);
 
         return view;
-    }
-
-
-
-    int[] stepsPerDay = {5000, 7000, 4000, 8000, 6000, 3000, 10000};
-    private void setupChart(int [] stepsPerDay) {
-
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        ArrayList<Integer> colors = new ArrayList<>();
-
- // colors
-        int Green_good = ContextCompat.getColor(requireContext(),R.color.Green_good);
-        int Blue_nord = ContextCompat.getColor(requireContext(),R.color.Blue_norm);
-        int Gold_record = ContextCompat.getColor(requireContext(),R.color.Gold_record);
-
-// Підписи осі X
-        String[] days = new String[]{"П", "В", "С", "Ч", "П", "С", "Н"};
-
-        for(int i=0;i<stepsPerDay.length;i++){
-            entries.add(new BarEntry(i,stepsPerDay[i]));
-
-            if (stepsPerDay[i] >= 10000) {
-                colors.add(Gold_record);
-
-            } else if (stepsPerDay[i] <= 6000) {
-                colors.add(Blue_nord);
-
-            } else {
-                colors.add(Green_good);
-            }
-        }
-        BarDataSet dataSet = new BarDataSet(entries, "Тиждень");
-        dataSet.setColors(colors);
-        dataSet.setDrawValues(false); // не показувати значення зверху
-
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.6f);
-        barChart.setData(barData);
-
-// Стилизація графіка
-        barChart.setDrawGridBackground(true);
-        barChart.setGridBackgroundColor(Color.parseColor("#E3F2FD")); // світло-блакитний фон
-        barChart.setDrawBorders(true);
-        barChart.setBorderColor(Color.parseColor("#90CAF9")); // рамка
-
-// Осі
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                int index = (int) value;
-                if (index >= 0 && index < days.length) {
-                    return days[index];
-                } else {
-                    return "";
-                }
-            }
-        });
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setTextSize(12f);
-
-        barChart.getAxisRight().setEnabled(false);
-
-        barChart.getAxisLeft().setDrawGridLines(true);
-        barChart.getAxisLeft().enableGridDashedLine(10f, 10f, 0f); // пунктир
-        barChart.getAxisLeft().setTextSize(12f);
-
-        barChart.getDescription().setEnabled(false);
-        barChart.getLegend().setEnabled(false); // сховати легенду
-        barChart.animateY(1000);
-        barChart.invalidate();
     }
 
 
@@ -189,4 +133,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Це можна залишити пустим, якщо не потрібно
     }
+
+
+
 }
