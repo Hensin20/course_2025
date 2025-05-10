@@ -1,5 +1,8 @@
 package com.example.project1;
 
+import static android.app.ProgressDialog.show;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -33,20 +36,25 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.security.auth.callback.Callback;
-
+import okhttp3.Callback;
 import okhttp3.Call;
+import okhttp3.Response;
+
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+
 
 public class Fragment_profile extends Fragment implements SensorEventListener {
 
@@ -75,6 +83,15 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         int[] stepsPerDay = {5000, 7000, 4000, 8000, 6000, 3000, 10000};
 
         SetupChart.setupChart(barChart,requireContext(),stepsPerDay);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("userId", -1);
+
+        if(userId != -1){
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+
+        }
 
         return view;
     }
@@ -108,13 +125,16 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
 
             textView_calories.setText(String.format("%.1f ккал", calories));
             textView_distance.setText(String.format("%.2f км", distance));
+
+
+
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", Context.MODE_PRIVATE);
+        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", MODE_PRIVATE);
         praviewsTotalStep = prefs.getInt("prevSteps", 0);
     }
 
@@ -123,10 +143,23 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         super.onPause();
         sensorManager.unregisterListener(this);
 
-        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", Context.MODE_PRIVATE);
+        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("prevSteps", praviewsTotalStep);
         editor.apply();
+
+        // --- ВИКЛИК ЗАПИСУ ---
+        SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        int userId = userPrefs.getInt("userId", -1);
+
+        if (userId != -1) {
+            int steps = Integer.parseInt(textView_steps.getText().toString());
+            float calories = steps * 0.04f;
+            float distance = steps * 0.7f / 1000f;
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+            uploadStats(userId, steps, calories, distance, currentDate);
+        }
     }
 
     @Override
@@ -134,6 +167,45 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         // Це можна залишити пустим, якщо не потрібно
     }
 
+    private void uploadStats(int userId, int steps, float calories, float distanceKm, String date) {
+        OkHttpClient client = new OkHttpClient();
 
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userId", userId);
+            json.put("steps", steps);
+            json.put("calories", calories);
+            json.put("distanceKm", distanceKm);
+            json.put("date", date);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(json.toString(), JSON);
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:5000/api/auth/stats/upload")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Помилка при надсиланні статистики", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String responseText = response.body().string();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), responseText, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
 
 }

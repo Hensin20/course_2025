@@ -1,6 +1,7 @@
 package com.example.project1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -100,17 +104,34 @@ public class MainActivity extends AppCompatActivity {
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Вхід успішний!", Toast.LENGTH_SHORT).show();
+                public void onResponse(@NonNull Call call, @NonNull Response response)  throws IOException {
+                    String responseBody = response.body().string();
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject json = new JSONObject(responseBody);
+                            int userId = json.getInt("userId");
+
+                            SharedPreferences prefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
+                            prefs.edit()
+                                    .putInt("userId", userId)
+                                    .putString("phoneNumber", phone)
+                                    .apply();
+
+                            runOnUiThread(() ->
+                                    Toast.makeText(MainActivity.this, "Вхід успішний", Toast.LENGTH_SHORT).show());
+
                             Intent intent = new Intent(MainActivity.this, activity_main_1.class);
                             startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Невірні дані", Toast.LENGTH_SHORT).show();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
+                    } else {
+                        runOnUiThread(() ->
+                                Toast.makeText(MainActivity.this, "Невірний логін або пароль", Toast.LENGTH_SHORT).show());
+                    }
                 }
+
 
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
