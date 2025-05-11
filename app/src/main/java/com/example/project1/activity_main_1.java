@@ -15,9 +15,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class activity_main_1 extends AppCompatActivity {
 
-    private ImageButton img_btn_calendar, img_btn_tack, img_btn_user;
+    private ImageButton img_btn_calendar, img_btn_trening, img_btn_user;
     Fragment_calendar fragment_calendar = new Fragment_calendar();
     Fragment_profile fragment_profile = new Fragment_profile();
+    Fragment_training fragment_training = new Fragment_training();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -32,7 +33,7 @@ public class activity_main_1 extends AppCompatActivity {
         });
 
         img_btn_calendar = findViewById(R.id.imageButton_calendar);
-        img_btn_tack = findViewById(R.id.imageButton_tack);
+        img_btn_trening = findViewById(R.id.imageButton_trening);
         img_btn_user = findViewById(R.id.imageButton_user);
 
 
@@ -50,7 +51,14 @@ public class activity_main_1 extends AppCompatActivity {
             @Override
             public void onClick(View v) { setNewFragment(fragment_profile); }
         });
+
+        img_btn_trening.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {setNewFragment(fragment_training);}
+        });
     }
+
+
 
     public void setNewFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

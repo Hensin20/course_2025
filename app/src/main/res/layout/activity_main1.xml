@@ -58,7 +58,7 @@
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <ImageButton
-            android:id="@+id/imageButton_tack"
+            android:id="@+id/imageButton_trening"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
