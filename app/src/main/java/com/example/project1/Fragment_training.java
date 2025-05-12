@@ -3,6 +3,7 @@ package com.example.project1;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +27,7 @@ public class Fragment_training extends Fragment {
     private List<Workout> workouts = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_training, container, false);
 
@@ -37,11 +37,35 @@ public class Fragment_training extends Fragment {
         adapter = new WorkoutAdapter(workouts);
         recyclerView.setAdapter(adapter);
 
+        Log.e("Fragment_training", "✅ Adapter створений, додаємо listener!");
+
+        // Додаємо обробку натисканняloadWorkouts
+        adapter.setOnCategoryClickListener(workout -> {
+            Log.e("Fragment_training", "✅ Клік по категорії: " + workout.getTitle());
+
+            Fragment_training_lessons fragment = new Fragment_training_lessons();
+            Bundle bundle = new Bundle();
+            bundle.putString("workoutId", workout.getWorkoutId());
+            bundle.putString("title", workout.getTitle());
+            bundle.putString("duration", workout.getDurationAll());
+            bundle.putString("exercise", workout.getExercise());
+            bundle.putString("imagePath", workout.getPicPath());
+            fragment.setArguments(bundle);
+
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameLayout, fragment);
+            transaction.addToBackStack(null);
+            transaction.commitAllowingStateLoss();
+
+            Log.e("Fragment_training", "🔥 Перехід виконано!");
+        });
+
         // Завантаження даних
         loadWorkouts();
 
         return view;
     }
+
     private void loadWorkouts() {
         Log.e("loadWorkouts", "Метод запущено!");
 
@@ -55,29 +79,22 @@ public class Fragment_training extends Fragment {
             return;
         }
 
-        FetchWorkouts fetchWorkouts = new FetchWorkouts(getContext(), recyclerView) {
-
-            protected void onDataLoaded(List<Workout> workouts) {
-                Log.e("loadWorkouts", "Дані завантажені: " + workouts.size() + " елементів");
-
-                Fragment_training.this.workouts.clear();
-                Fragment_training.this.workouts.addAll(workouts);
-
-                if (adapter != null) {
-                    adapter.notifyDataSetChanged();
-                    Log.e("loadWorkouts", "Адаптер оновлено!");
-                } else {
-                    Log.e("loadWorkouts", "⚠️ Адаптер == null!");
-                }
+        FetchWorkouts fetchWorkouts = new FetchWorkouts(getContext()) {
+            @Override
+            protected void onDataLoaded(List<Workout> data) {
+                workouts.clear();
+                workouts.addAll(data);
+                adapter.notifyDataSetChanged();
             }
 
+            @Override
             protected void onError(String errorMessage) {
-                Log.e("loadWorkouts", "Помилка завантаження: " + errorMessage);
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         };
+        fetchWorkouts.fetchWorkouts();
 
-        Log.e("loadWorkouts", "Виклик fetchWorkouts.fetchWorkouts()");
+        Log.e("loadWorkouts", "📌 Виклик fetchWorkouts.fetchWorkouts()");
         fetchWorkouts.fetchWorkouts();
     }
 }

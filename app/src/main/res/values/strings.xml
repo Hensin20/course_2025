@@ -18,7 +18,7 @@
     <string name="img_button_quality">Досягнення</string>
     <string name="img_button_statistics">Статистика</string>
     <string name="textView_dynamic_count">0</string>
-
+    <string name="textView_lesson">Уроки</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

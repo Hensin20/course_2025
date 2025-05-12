@@ -4,22 +4,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Workout {
+    private String workoutId;
     private String title;
-    private String description;
+    private String exercise;
     private String picPath;
     private String durationAll;
     private ArrayList<Lession> lessions;
 
     // Конструктор, гетери та сетери
-    public Workout(String title, String description, String picPath, String durationAll, ArrayList<Lession> lessions) {
+    public Workout(String workoutId, String title, String exercise, String picPath, String durationAll, ArrayList<Lession> lessions) {
         this.title = title;
-        this.description = description;
+        this.exercise = exercise;
         this.picPath = picPath;
         this.durationAll = durationAll;
         this.lessions = lessions;
     }
 
+    public String getWorkoutId() {return workoutId;}
     public String getTitle() { return title; }
     public String getPicPath() { return picPath; }
+    public String getExercise() {return exercise;}
     public String getDurationAll() { return durationAll; }
 }

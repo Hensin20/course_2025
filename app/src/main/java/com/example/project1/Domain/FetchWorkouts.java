@@ -23,24 +23,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class FetchWorkouts {
+public abstract class FetchWorkouts {
     private Context context;
-    private RecyclerView recyclerView;
 
-    // Конструктор, що приймає контекст і RecyclerView
-    public FetchWorkouts(Context context, RecyclerView recyclerView) {
+    public FetchWorkouts(Context context) {
         this.context = context;
-        this.recyclerView = recyclerView;
     }
 
     public void fetchWorkouts() {
-        // 1. Створюємо запит
         Request request = new Request.Builder()
                 .url("http://10.0.2.2:5000/api/workouts")
                 .get()
                 .build();
 
-        // 2. Виконуємо асинхронний запит
         OkHttpClient client = new OkHttpClient();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -49,24 +44,23 @@ public class FetchWorkouts {
                     String json = response.body().string();
                     List<Workout> workouts = parseWorkouts(json);
 
-                    // Оновлюємо UI у головному потоці
                     if (context instanceof AppCompatActivity) {
-                        ((AppCompatActivity)context).runOnUiThread(() -> setupRecyclerView(workouts));
-                    } else {
-                        Log.e("FetchWorkouts", "⚠️ Отриманий контекст: " + context.getClass().getSimpleName());
+                        ((AppCompatActivity)context).runOnUiThread(() -> onDataLoaded(workouts));
                     }
                 } else {
-                    ((MainActivity)context).runOnUiThread(() ->
-                            Toast.makeText(context, "Помилка: " + response.code(), Toast.LENGTH_SHORT).show()
-                    );
+                    if (context instanceof AppCompatActivity) {
+                        ((AppCompatActivity)context).runOnUiThread(() ->
+                                onError("Помилка: " + response.code()));
+                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                ((MainActivity)context).runOnUiThread(() ->
-                        Toast.makeText(context, "Помилка: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                if (context instanceof AppCompatActivity) {
+                    ((AppCompatActivity)context).runOnUiThread(() ->
+                            onError("Помилка: " + e.getMessage()));
+                }
             }
         });
     }
@@ -77,9 +71,7 @@ public class FetchWorkouts {
         return gson.fromJson(json, listType);
     }
 
-    private void setupRecyclerView(List<Workout> workouts) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        WorkoutAdapter adapter = new WorkoutAdapter(workouts);
-        recyclerView.setAdapter(adapter);
-    }
+    protected abstract void onDataLoaded(List<Workout> workouts);
+
+    protected abstract void onError(String errorMessage);
 }
