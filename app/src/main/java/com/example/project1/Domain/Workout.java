@@ -1,6 +1,5 @@
 package com.example.project1.Domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Workout {
@@ -9,10 +8,10 @@ public class Workout {
     private String exercise;
     private String picPath;
     private String durationAll;
-    private ArrayList<Lession> lessions;
+    private ArrayList<Exercise> lessions;
 
     // Конструктор, гетери та сетери
-    public Workout(String workoutId, String title, String exercise, String picPath, String durationAll, ArrayList<Lession> lessions) {
+    public Workout(String workoutId, String title, String exercise, String picPath, String durationAll, ArrayList<Exercise> lessions) {
         this.title = title;
         this.exercise = exercise;
         this.picPath = picPath;

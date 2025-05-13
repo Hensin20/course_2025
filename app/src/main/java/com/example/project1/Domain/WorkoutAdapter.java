@@ -19,7 +19,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     private final List<Workout> workouts;
     private OnCategoryClickListener onCategoryClickListener;
-
     public WorkoutAdapter(List<Workout> workouts) {
         this.workouts = workouts;
     }
@@ -74,6 +73,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             tvTitle = itemView.findViewById(R.id.titleText);
             tvDuration = itemView.findViewById(R.id.durationText);
             tvExercise = itemView.findViewById(R.id.excerciseText);
+
         }
     }
 

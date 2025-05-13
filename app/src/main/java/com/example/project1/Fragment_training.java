@@ -46,6 +46,7 @@ public class Fragment_training extends Fragment {
             Fragment_training_lessons fragment = new Fragment_training_lessons();
             Bundle bundle = new Bundle();
             bundle.putString("workoutId", workout.getWorkoutId());
+            Log.e("Fragment_training", "Передано workoutId" + workout.getWorkoutId());
             bundle.putString("title", workout.getTitle());
             bundle.putString("duration", workout.getDurationAll());
             bundle.putString("exercise", workout.getExercise());
