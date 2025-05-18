@@ -13,22 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
+
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:elevation="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/aquawax_fx_bold_rial"
+                android:text="@string/textView_trening" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
+                android:elevation="7dp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 tools:ignore="SpeakableTextPresentCheck" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

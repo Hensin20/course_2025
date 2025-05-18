@@ -3,4 +3,8 @@
     <style name="RoundedImageView">
         <item name="cornerSize">20dp</item> <!-- Закруглення кутів -->
     </style>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:fontFamily">@font/aquawax_fx_bold_rial</item>
+    </style>
 </resources>

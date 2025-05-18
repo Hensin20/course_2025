@@ -35,7 +35,7 @@
         android:layout_marginBottom="24dp"
         android:layout_marginStart="10dp"
         android:text="title"
-
+        android:fontFamily="@font/aquawax_fx_bold_rial"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/view4" />

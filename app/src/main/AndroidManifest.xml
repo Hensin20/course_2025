@@ -18,6 +18,7 @@
         android:theme="@style/Theme.Project1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".activity_main_1"
             android:exported="false" />
