@@ -1,4 +1,4 @@
-package com.example.project1.Domain;
+package com.example.project1.trenning;
 
 import android.content.Context;
 import android.util.Log;

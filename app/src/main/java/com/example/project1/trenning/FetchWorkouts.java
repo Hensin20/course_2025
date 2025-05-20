@@ -1,15 +1,10 @@
-package com.example.project1.Domain;
+package com.example.project1.trenning;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project1.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

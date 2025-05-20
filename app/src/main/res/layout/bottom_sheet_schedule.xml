@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -23,11 +22,9 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/scheduleTextView"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scheduleRecyclerView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Розклад"
-        android:textSize="16sp"
-        android:layout_gravity="center_horizontal"/>
+        android:paddingTop="8dp"/>
 </LinearLayout>

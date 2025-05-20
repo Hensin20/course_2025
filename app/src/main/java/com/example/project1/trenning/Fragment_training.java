@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project1.trenning;
 
 import android.os.Bundle;
 
@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.project1.Domain.FetchWorkouts;
-import com.example.project1.Domain.Workout;
-import com.example.project1.Domain.WorkoutAdapter;
+import com.example.project1.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,6 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.project1.trenning.Fragment_training;
+import com.example.project1.calendar.Fragment_calendar;
+
 public class activity_main_1 extends AppCompatActivity {
 
     private ImageButton img_btn_calendar, img_btn_trening, img_btn_user;
