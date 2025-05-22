@@ -5,6 +5,22 @@
     </style>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="android:fontFamily">@font/aquawax_fx_bold_rial</item>
+        <item name="android:fontFamily">@font/menlo_regular</item>
+        <item name="android:textColor">@color/main_text_lite</item>
+    </style>
+    
+    <style name="HeadLine">
+        <item name="android:fontFamily">@font/lilita_one_regular</item>
+        <item name="android:textColor">@color/main_text_red</item>
+
+    </style>
+    <style name="CalendarDateTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/main_text_lite</item> <!-- Колір дат -->
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CalendarWeekDayTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/main_text_lite</item> <!-- Колір днів тижня -->
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

@@ -10,11 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="450dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_view_profile"
+            android:elevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            tools:ignore="MissingConstraints" />
+
         <TextView
             android:id="@+id/textView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/aquawax_fx_bold_rial"
+            style="@style/HeadLine"
             android:gravity="center"
             android:text="@string/textView_calendar"
             android:textSize="26sp"
@@ -39,10 +52,14 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="0dp"
-            android:layout_height="432dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            android:layout_height="0dp"
+            android:elevation="9dp"
+            android:dateTextAppearance="@style/CalendarDateTextAppearance"
+            android:weekDayTextAppearance="@style/CalendarWeekDayTextAppearance"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

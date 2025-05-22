@@ -3,13 +3,32 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="Gray_Chateau">#9ba3a6</color>
-    <color name="Blue">#88BEEB</color>
+    <color name="transparent">#00000000</color>  --- Прозрачний
+
+    //Головна сторінка -- Темна
+    <color name="main_background">#2E2E2E</color>
+    <color name="main_view">#2D2D2D</color>
+    <color name="main_button">#242424</color>
+    <color name="main_text_lite">#ECF0F1</color>
+    <color name="main_text_red">#E74C3C</color>
+    <color name="text_code">#ECF0F1</color>
+
+
+    //Конопки реєстрації - авторизації
+    <color name="Button_reg_log">#004080</color>
+
+
+    //Фрагменти профіль
+    <color name="fragment">#444650</color>
+
+
+
+
     <color name="Button_main">#749BED</color>
-    <color name="view_profile">#E6F1FA</color>
     <color name="view_profile_stroke">#4477D4</color>
     <color name="bottom_sheet_schedule">#BBD8EF</color>
     <color name="orange">#AD1B1B</color>
-
+    <color name="view_profile">#E6F1FA</color>
 
     //Графік
     <color name="Green_good">#00D26A</color>

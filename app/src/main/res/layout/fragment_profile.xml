@@ -12,33 +12,32 @@
 
         <TextView
             android:id="@+id/textView10"
+            style="@style/HeadLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/aquawax_fx_bold_rial"
             android:gravity="center"
             android:text="@string/textView_profile"
             android:textSize="26sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="135dp"
             android:layout_marginStart="10dp"
 
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="410dp"
-            android:background="@drawable/rounded_view_profile"
 
+            android:background="@drawable/rounded_view_profile"
             android:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <View
             android:id="@+id/view3"
@@ -46,15 +45,15 @@
             android:layout_height="300dp"
 
             android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="100dp"
-            android:background="@drawable/rounded_view_profile"
 
+            android:background="@drawable/rounded_view_profile"
             android:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
 
 
         <com.github.mikephil.charting.charts.BarChart
@@ -62,19 +61,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
 
             android:elevation="9dp"
             app:layout_constraintBottom_toBottomOf="@+id/view3"
             app:layout_constraintEnd_toEndOf="@+id/view3"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view3"
-            app:layout_constraintTop_toTopOf="@+id/view3" />
-
-
-
+            app:layout_constraintTop_toTopOf="@+id/view3"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -95,6 +93,8 @@
             android:elevation="10dp"
             android:layout_marginTop="8dp"
             android:text="@string/texView_running"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/imageView4"
@@ -110,6 +110,8 @@
             android:layout_marginTop="29dp"
             android:gravity="center"
             android:text="@string/textView_dynamic_count"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="@+id/imageView4"
@@ -135,6 +137,8 @@
             android:elevation="10dp"
             android:layout_marginTop="8dp"
             android:text="@string/texView_calories"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -149,6 +153,8 @@
             android:layout_marginTop="29dp"
             android:gravity="center"
             android:text="@string/textView_dynamic_count"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="@+id/imageView"
@@ -173,6 +179,8 @@
             android:elevation="10dp"
             android:layout_marginTop="8dp"
             android:text="@string/texView_distance"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/imageView5"
@@ -187,6 +195,8 @@
             android:layout_marginTop="29dp"
             android:gravity="center"
             android:text="@string/textView_dynamic_count"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/imageView5"
             app:layout_constraintStart_toStartOf="@+id/imageView5"
@@ -198,7 +208,7 @@
             android:layout_height="60dp"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="35dp"
-            android:background="@color/white"
+            android:background="@color/transparent"
             android:contentDescription="@string/img_button_quality"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_quality"
@@ -214,6 +224,9 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/img_button_quality"
+            android:textColor="@color/main_text_lite"
+            style="@style/AppTheme"
+            android:textSize="15sp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/imageButton2"
             app:layout_constraintStart_toStartOf="@+id/imageButton2"
@@ -225,7 +238,7 @@
             android:layout_height="60dp"
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="35dp"
-            android:background="@color/white"
+            android:background="@color/transparent"
             android:contentDescription="@string/img_button_statistics"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_statistics"
@@ -240,6 +253,8 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/img_button_statistics"
+            style="@style/AppTheme"
+            android:textColor="@color/main_text_lite"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/imageButton3"
             app:layout_constraintStart_toStartOf="@+id/imageButton3"
@@ -249,13 +264,13 @@
             android:id="@+id/imageView2"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/imeg_button_profile"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_profile"
-            android:contentDescription="@string/imeg_button_profile"
-            app:layout_constraintBottom_toTopOf="@+id/view2"
             app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-            app:layout_constraintStart_toEndOf="@+id/imageButton2" />
+            app:layout_constraintStart_toEndOf="@+id/imageButton2"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

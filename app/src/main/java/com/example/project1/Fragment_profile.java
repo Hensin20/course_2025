@@ -180,17 +180,20 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         client.newCall(request).enqueue(new Callback() {
 
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Помилка при надсиланні статистики", Toast.LENGTH_SHORT).show();
-                });
+                if (isAdded()) { // <--- Перевірка, чи фрагмент прикріплений
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Помилка при надсиланні статистики", Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
-
 
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 String responseText = response.body().string();
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), responseText, Toast.LENGTH_SHORT).show();
-                });
+                if (isAdded()) { // <--- Перевірка, чи фрагмент прикріплений
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), responseText, Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }

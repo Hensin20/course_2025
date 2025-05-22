@@ -13,9 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
@@ -28,9 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
+                style="@style/HeadLine"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:fontFamily="@font/aquawax_fx_bold_rial"
                 android:text="@string/textView_trening" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -9,6 +9,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/AppTheme"
         android:textSize="18sp"
         android:textStyle="bold"
         android:text="Назва події"/>
@@ -17,6 +18,7 @@
         android:id="@+id/timeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/AppTheme"
         android:textSize="16sp"
         android:text="Час проведення"/>
 </LinearLayout>

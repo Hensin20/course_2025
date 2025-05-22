@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     android:layout_marginTop="10dp"
-    android:background="@drawable/rounded_view_profile">
+    android:background="@drawable/rounded_view_exercise_bg">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/pic"
@@ -27,6 +27,7 @@
         android:layout_marginTop="10dp"
         android:textSize="14sp"
         android:text="title"
+        style="@style/AppTheme"
         app:layout_constraintStart_toEndOf="@+id/pic"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +39,7 @@
         android:layout_marginTop="40dp"
         android:text="00:00"
         android:textSize="14sp"
+        style="@style/AppTheme"
         app:layout_constraintStart_toEndOf="@+id/pic"
         app:layout_constraintTop_toTopOf="parent" />
 

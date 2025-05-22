@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <size android:height="4dp" />
-    <solid android:color="#BBD8EF" /> <!-- Світло-сірий колір -->
+    <solid android:color="@color/white" /> <!-- Світло-сірий колір -->
     <corners android:radius="8dp" /> <!-- Закруглені краї -->
 </shape>

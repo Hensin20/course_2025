@@ -69,7 +69,8 @@
                     android:id="@+id/titleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/aquawax_fx_bold_rial"
+                    style="@style/HeadLine"
+                    android:textColor="@color/main_text_red"
                     android:layout_marginStart="8dp"
                     android:text="Title"
                     android:textSize="26sp" />
@@ -91,7 +92,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="30dp"
-
+                        style="@style/AppTheme"
+                        android:textColor="@color/main_text_lite"
                         android:text="20 min"
                         android:textSize="16sp" />
 
@@ -99,6 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" * "
+                        style="@style/AppTheme"
                         android:textColor="@color/orange"
                         android:textSize="16sp" />
 
@@ -106,7 +109,8 @@
                         android:id="@+id/excerciseText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        style="@style/AppTheme"
+                        android:textColor="@color/main_text_lite"
                         android:layout_weight="1"
                         android:text="Excercise"
                         android:textSize="16sp" />
@@ -119,7 +123,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/aquawax_fx_bold_rial"
+                    style="@style/AppTheme"
+                    android:textColor="@color/main_text_lite"
                     android:text="@string/textView_lesson"
                     android:textSize="16sp" />
 

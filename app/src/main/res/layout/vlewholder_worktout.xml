@@ -18,10 +18,10 @@
 
     <ImageView
         android:id="@+id/pic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-
+        android:layout_width="319dp"
+        android:layout_height="175dp"
         android:layout_marginBottom="25dp"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,8 +35,8 @@
         android:layout_marginBottom="24dp"
         android:layout_marginStart="10dp"
         android:text="title"
-        android:fontFamily="@font/aquawax_fx_bold_rial"
-        android:textSize="14sp"
+        style="@style/HeadLine"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/view4" />
 
@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="30dp"
+            style="@style/AppTheme"
             android:text="20 min"
             android:textSize="12sp" />
 
@@ -63,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" * "
+            style="@style/AppTheme"
             android:textColor="@color/orange"
             android:textSize="12sp" />
 
@@ -70,7 +72,7 @@
             android:id="@+id/excerciseText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            style="@style/AppTheme"
             android:layout_weight="1"
             android:text="Excercise"
             android:textSize="12sp" />

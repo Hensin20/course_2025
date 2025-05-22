@@ -28,7 +28,8 @@ public class SetupChart  {
         int Green_good = ContextCompat.getColor(context,R.color.Green_good);
         int Blue_nord = ContextCompat.getColor(context,R.color.Blue_norm);
         int Gold_record = ContextCompat.getColor(context,R.color.Gold_record);
-
+        int background = ContextCompat.getColor(context,R.color.fragment);
+        int textColors = ContextCompat.getColor(context,R.color.text_code);
 // Підписи осі X
         String[] days = new String[]{"П", "В", "С", "Ч", "П", "С", "Н"};
 
@@ -55,9 +56,9 @@ public class SetupChart  {
 
 // Стилизація графіка
         barChart.setDrawGridBackground(true);
-        barChart.setGridBackgroundColor(Color.parseColor("#E3F2FD")); // світло-блакитний фон
+        barChart.setGridBackgroundColor(background); // світло-блакитний фон
         barChart.setDrawBorders(true);
-        barChart.setBorderColor(Color.parseColor("#90CAF9")); // рамка
+        barChart.setBorderColor(background); // рамка
 
 // Осі
         XAxis xAxis = barChart.getXAxis();
@@ -76,12 +77,14 @@ public class SetupChart  {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setTextSize(12f);
+        xAxis.setTextColor(textColors);
 
         barChart.getAxisRight().setEnabled(false);
 
         barChart.getAxisLeft().setDrawGridLines(true);
         barChart.getAxisLeft().enableGridDashedLine(10f, 10f, 0f); // пунктир
         barChart.getAxisLeft().setTextSize(12f);
+        barChart.getAxisLeft().setTextColor(textColors);
 
         barChart.getDescription().setEnabled(false);
         barChart.getLegend().setEnabled(false); // сховати легенду

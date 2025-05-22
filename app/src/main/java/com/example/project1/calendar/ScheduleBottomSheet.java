@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project1.calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project1.calendar.EventModel;
+import com.example.project1.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.io.Serializable;
 import java.util.List;
