@@ -108,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         try {
                             JSONObject json = new JSONObject(responseBody);
-                            int userId = json.getInt("userId");
+                            String token = json.getString("token");
 
                             SharedPreferences prefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
                             prefs.edit()
-                                    .putInt("userId", userId)
+                                    .putString("jwt_token", token)
                                     .putString("phoneNumber", phone)
                                     .apply();
 
