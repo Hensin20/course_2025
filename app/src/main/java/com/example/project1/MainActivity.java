@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,49 +94,61 @@ public class MainActivity extends AppCompatActivity {
             }
 
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            String json = "{\"phoneNumber\":\"" + phone + "\",\"password\":\"" + password + "\"}";
+            String json = "{\"phoneNumber\":\"" + phone + "\",\"password\":\"" + password + "\",\"roleAdmin\":\"user\"}";
+
 
             RequestBody body = RequestBody.create(json, JSON);
             Request request = new Request.Builder()
-                    .url("http://10.0.2.2:5000/api/auth/login")// для емулятора
+                    .url(ApiClient.BASE_URL +"/api/auth/login")
                     .post(body)
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response)  throws IOException {
-                    String responseBody = response.body().string();
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    String responseBody = response.body() != null ? response.body().string() : "{}";
+
                     if (response.isSuccessful()) {
                         try {
                             JSONObject json = new JSONObject(responseBody);
                             String token = json.getString("token");
+                            String role = json.optString("roleAdmin", "user"); // Виправлено на roleAdmin
+                            // Отримуємо роль
 
+                            // Зберігаємо дані користувача
                             SharedPreferences prefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
                             prefs.edit()
                                     .putString("jwt_token", token)
                                     .putString("phoneNumber", phone)
+                                    .putString("userRole", role) // Зберігаємо роль
                                     .apply();
 
-                            runOnUiThread(() ->
-                                    Toast.makeText(MainActivity.this, "Вхід успішний", Toast.LENGTH_SHORT).show());
-
-                            Intent intent = new Intent(MainActivity.this, activity_main_1.class);
-                            startActivity(intent);
+                            runOnUiThread(() -> {
+                                Toast.makeText(MainActivity.this, "✅ Вхід успішний!", Toast.LENGTH_SHORT).show();
+                                Log.d("main", "userRole: " + role);
+                                Intent intent = new Intent(MainActivity.this, activity_main_1.class);
+                                startActivity(intent);
+                                finish(); // Закриваємо поточну активність
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            runOnUiThread(() ->
+                                    Toast.makeText(MainActivity.this, "❌ Помилка обробки відповіді", Toast.LENGTH_SHORT).show()
+                            );
                         }
                     } else {
+                        Log.d("Login", "Server response: " + responseBody);
                         runOnUiThread(() ->
-                                Toast.makeText(MainActivity.this, "Невірний логін або пароль", Toast.LENGTH_SHORT).show());
+                                Toast.makeText(MainActivity.this, "❌ Невірний логін або пароль", Toast.LENGTH_SHORT).show()
+                        );
                     }
                 }
-
 
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     runOnUiThread(() ->
-                            Toast.makeText(MainActivity.this, "Помилка підключення", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(MainActivity.this, "⚠ Помилка підключення: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                     );
                 }
             });

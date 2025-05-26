@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.project1.ApiClient;
 import com.example.project1.R;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         if (exercise.getPreviewImageUrl() != null && !exercise.getPreviewImageUrl().isEmpty()) {
             Log.e("ExerciseAdapter", "✅ Отримано PreviewImageUrl: " + exercise.getPreviewImageUrl());
             Glide.with(context)
-                    .load("http://10.0.2.2:5000/images/" + exercise.getPreviewImageUrl()) // Додай абсолютний шлях
+                    .load(ApiClient.BASE_URL +"/images/" + exercise.getPreviewImageUrl()) // Додай абсолютний шлях
                     .placeholder(R.drawable.kardio)
                     .into(holder.image);
         } else {

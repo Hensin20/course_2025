@@ -2,6 +2,7 @@ package com.example.project1;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -47,32 +48,39 @@ public class Activity_registration extends AppCompatActivity {
 
     private void registerUser(String phone, String password) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        String json = "{\"phoneNumber\":\"" + phone + "\",\"password\":\"" + password + "\"}";
+        String json = "{\"phoneNumber\":\"" + phone + "\",\"password\":\"" + password + "\",\"roleAdmin\":\"user\"}";
 
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:5000/api/auth/register")
+                .url(ApiClient.BASE_URL +"/api/auth/register")
                 .post(body)
+                .addHeader("Content-Type", "application/json") // Додаємо заголовок
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body() != null ? response.body().string() : "Empty response";
+
                 runOnUiThread(() -> {
+                    Log.d("Register", "Response code: " + response.code());
+                    Log.d("Register", "Response body: " + responseText);
+
                     if (response.isSuccessful()) {
-                        Toast.makeText(Activity_registration.this, "Реєстрація успішна!", Toast.LENGTH_SHORT).show();
-                        finish(); // повернення назад
+                        Toast.makeText(Activity_registration.this, "✅ Реєстрація успішна!", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
-                        Toast.makeText(Activity_registration.this, "Помилка: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity_registration.this, "❌ Помилка: " + responseText, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(Activity_registration.this, "Помилка підключення", Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> {
+                    Log.e("Register", "Помилка запиту: " + e.getMessage());
+                    Toast.makeText(Activity_registration.this, "⚠ Помилка підключення", Toast.LENGTH_SHORT).show();
+                });
             }
         });
     }

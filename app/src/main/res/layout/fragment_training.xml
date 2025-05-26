@@ -30,6 +30,14 @@
                 android:gravity="center"
                 android:text="@string/textView_trening" />
 
+            <Button
+                android:id="@+id/button_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/Button_reg_log"
+                style="@style/AppTheme"
+                android:text="@string/imag_button_add_trening" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_category"
                 android:layout_width="match_parent"

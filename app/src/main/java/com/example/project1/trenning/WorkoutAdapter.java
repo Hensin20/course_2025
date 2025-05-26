@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project1.ApiClient;
 import com.example.project1.R;
 import com.bumptech.glide.Glide;
 
@@ -40,7 +41,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         // Завантаження зображення через Glide
         Glide.with(holder.itemView.getContext())
-                .load("http://10.0.2.2:5000/images/" + workout.getPicPath())
+                .load(ApiClient.BASE_URL +"/images/" + workout.getPicPath())
                 .placeholder(R.drawable.kardio)
                 .into(holder.ivWorkout);
 

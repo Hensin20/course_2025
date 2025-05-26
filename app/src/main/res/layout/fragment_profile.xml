@@ -203,7 +203,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/imageButton_achievement"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="40dp"
@@ -228,12 +228,12 @@
             style="@style/AppTheme"
             android:textSize="15sp"
             android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/imageButton2"
-            app:layout_constraintStart_toStartOf="@+id/imageButton2"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+            app:layout_constraintEnd_toEndOf="@+id/imageButton_achievement"
+            app:layout_constraintStart_toStartOf="@+id/imageButton_achievement"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton_achievement" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/imageButton_status"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="40dp"
@@ -256,9 +256,9 @@
             style="@style/AppTheme"
             android:textColor="@color/main_text_lite"
             android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-            app:layout_constraintStart_toStartOf="@+id/imageButton3"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+            app:layout_constraintEnd_toEndOf="@+id/imageButton_status"
+            app:layout_constraintStart_toStartOf="@+id/imageButton_status"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton_status" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -268,8 +268,8 @@
             android:contentDescription="@string/imeg_button_profile"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_profile"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-            app:layout_constraintStart_toEndOf="@+id/imageButton2"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton_status"
+            app:layout_constraintStart_toEndOf="@+id/imageButton_achievement"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
 

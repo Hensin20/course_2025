@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.project1.ApiClient;
 import com.example.project1.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -75,7 +76,7 @@ public class Fragment_training_lessons extends Fragment {
         tvExcercise.setText(exercise);
 
         Glide.with(requireContext())
-                .load("http://10.0.2.2:5000/images/" + imagePath)
+                .load(ApiClient.BASE_URL +"/images/" + imagePath)
                 .placeholder(R.drawable.kardio)
                 .into(imageView);
 
@@ -111,7 +112,7 @@ public class Fragment_training_lessons extends Fragment {
     private void fetchExercises() {
 
 
-        String url = "http://10.0.2.2:5000/api/workouts/" + workoutId + "/exercises";
+        String url = ApiClient.BASE_URL +"/api/workouts/" + workoutId + "/exercises";
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

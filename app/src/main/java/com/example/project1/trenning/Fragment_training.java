@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.project1.R;
@@ -24,6 +25,7 @@ public class Fragment_training extends Fragment {
     private WorkoutAdapter adapter;
     private List<Workout> workouts = new ArrayList<>();
     private FetchWorkouts fetchWorkouts;
+    private Button button_add;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +35,15 @@ public class Fragment_training extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new WorkoutAdapter(workouts);
         recyclerView.setAdapter(adapter);
+        button_add = view.findViewById(R.id.button_add);
+
+
+        button_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         adapter.setOnCategoryClickListener(workout -> {
             if (isAdded()) { // Перевірка, чи фрагмент доданий до Activity

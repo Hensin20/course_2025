@@ -1,7 +1,9 @@
 package com.example.project1;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -39,6 +41,17 @@ public class activity_main_1 extends AppCompatActivity {
         img_btn_trening = findViewById(R.id.imageButton_trening);
         img_btn_user = findViewById(R.id.imageButton_user);
 
+        SharedPreferences prefs = getSharedPreferences("userPrefs", MODE_PRIVATE);
+
+        String userRole = prefs.getString("userRole", "user"); // За замовчуванням "user"
+
+        //ImageButton adminButton = findViewById(R.id.imageButton_admin);
+       // Log.d("main", "userRole: " + userRole);
+       // if ("admin".equals(userRole)) {
+       //     adminButton.setVisibility(View.VISIBLE); // Показуємо кнопку адміна
+       // } else {
+       //     adminButton.setVisibility(View.GONE); // Приховуємо для звичайних користувачів
+       // }
 
         setNewFragment(fragment_calendar);
 

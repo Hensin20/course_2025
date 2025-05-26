@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     private SensorManager sensorManager = null;
     private Sensor stepSensor;
     private int praviewsTotalStep = 0;
+    private ImageButton imageButton_status, imageButton_achievement;
     private TextView textView_steps, textView_calories, textView_distance;
 
 
@@ -63,7 +65,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         textView_steps = view.findViewById(R.id.textView_steps_count);
         textView_calories = view.findViewById(R.id.textView_calories_count);
         textView_distance = view.findViewById(R.id.textView_distance_count);
-
+        imageButton_status = view.findViewById(R.id.imageButton_status);
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
@@ -80,20 +82,75 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
 
         }
 
+        imageButton_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendStats();
+            }
+        });
+
         return view;
     }
 
 
+    @Override
     public void onResume() {
         super.onResume();
-        if(stepSensor == null){
+        if (stepSensor == null) {
             Toast.makeText(requireContext(), "Ваш пристрій не підтримує лічильник кроків", Toast.LENGTH_LONG).show();
+        } else {
+            sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-        else{
-            sensorManager.registerListener(this,stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // 🔹 Перевірка, чи змінився день
+        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", MODE_PRIVATE);
+        String lastDate = prefs.getString("lastDate", "");
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        if (!lastDate.equals(currentDate)) {
+            resetDailyStats(); // Скидаємо дані
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("lastDate", currentDate);
+            editor.apply();
+        }
+
+        // 🔹 Відправити статистику на сервер
+        SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        int userId = userPrefs.getInt("userId", -1);
+        int steps = Integer.parseInt(textView_steps.getText().toString());
+        float calories = steps * 0.04f;
+        float distance = steps * 0.7f / 1000f;
+
+        if (userId != -1) {
+            uploadStats(userId, steps, calories, distance, currentDate);
         }
     }
+    private void sendStats() {
+        SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        int userId = userPrefs.getInt("userId", -1);
 
+        if (userId != -1) {
+            int steps = Integer.parseInt(textView_steps.getText().toString());
+            float calories = steps * 0.04f;
+            float distance = steps * 0.7f / 1000f;
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+            uploadStats(userId, steps, calories, distance, currentDate);
+        } else {
+            Toast.makeText(requireContext(), "❌ Помилка: ID користувача не знайдено!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void resetDailyStats() {
+        praviewsTotalStep = 0;
+        textView_steps.setText("0");
+        textView_calories.setText("0 ккал");
+        textView_distance.setText("0.00 км");
+
+        SharedPreferences prefs = requireContext().getSharedPreferences("stepPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("prevSteps", 0);
+        editor.apply();
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -173,7 +230,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:5000/api/auth/stats/upload")
+                .url(ApiClient.BASE_URL +"/api/auth/stats/upload")
                 .post(body)
                 .build();
 

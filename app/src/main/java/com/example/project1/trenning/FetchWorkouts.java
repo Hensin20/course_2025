@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.project1.ApiClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,7 +34,7 @@ public abstract class FetchWorkouts {
         }
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:5000/api/workouts")
+                .url(ApiClient.BASE_URL +"/api/workouts")
                 .get()
                 .build();
 
