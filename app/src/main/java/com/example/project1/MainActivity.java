@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject json = new JSONObject(responseBody);
                             String token = json.getString("token");
                             String role = json.optString("roleAdmin", "user"); // Виправлено на roleAdmin
+                            String userId = json.getString("userId");
                             // Отримуємо роль
 
                             // Зберігаємо дані користувача
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                             prefs.edit()
                                     .putString("jwt_token", token)
                                     .putString("phoneNumber", phone)
+                                    .putString("userId", userId)
                                     .putString("userRole", role) // Зберігаємо роль
                                     .apply();
 

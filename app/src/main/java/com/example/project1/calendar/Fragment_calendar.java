@@ -1,5 +1,8 @@
 package com.example.project1.calendar;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,23 +75,26 @@ public class Fragment_calendar extends Fragment {
                 Toast.makeText(getContext(), "Заповніть всі поля!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
+            String token = prefs.getString("jwt_token", "user");
 
-            saveEvent(eventName, date, time);
+            saveEvent(eventName, date, time, token);
             bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.show();
     }
 
-    private void saveEvent(String name, String date, String time) {
+    private void saveEvent(String name, String date, String time, String token) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String json = "{\"title\":\"" + name + "\",\"eventDate\":\"" + date + "\",\"eventTime\":\"" + time + "\"}";
 
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
-                .url(ApiClient.BASE_URL +"/api/events/add-event")
+                .url(ApiClient.BASE_URL + "/api/events/add-event")
                 .post(body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -116,6 +122,7 @@ public class Fragment_calendar extends Fragment {
             }
         });
     }
+
 
     private void fetchEvents(String date) {
         String url = ApiClient.BASE_URL +"/api/events/" + date;

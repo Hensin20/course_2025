@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,12 +75,12 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         SetupChart.setupChart(barChart,requireContext(),stepsPerDay);
 
         SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
+        String userIdStr = prefs.getString("userId", "-1");
+        int userId = Integer.parseInt(userIdStr);  // або Integer.valueOf(...)
+
 
         if(userId != -1){
             String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
-
         }
 
         imageButton_status.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +117,9 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
 
         // 🔹 Відправити статистику на сервер
         SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
-        int userId = userPrefs.getInt("userId", -1);
+        String userIdStr = userPrefs.getString("userId", "-1");
+        int userId = Integer.parseInt(userIdStr);
+
         int steps = Integer.parseInt(textView_steps.getText().toString());
         float calories = steps * 0.04f;
         float distance = steps * 0.7f / 1000f;
@@ -127,7 +130,9 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     }
     private void sendStats() {
         SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
-        int userId = userPrefs.getInt("userId", -1);
+        String userIdStr = userPrefs.getString("userId", "-1");
+        int userId = Integer.parseInt(userIdStr);
+        Log.i("sendStats", "userId" + userId);
 
         if (userId != -1) {
             int steps = Integer.parseInt(textView_steps.getText().toString());
@@ -151,7 +156,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         editor.putInt("prevSteps", 0);
         editor.apply();
     }
-
+    private int currentSteps = 0;
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -194,7 +199,8 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
 
         // --- ВИКЛИК ЗАПИСУ ---
         SharedPreferences userPrefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
-        int userId = userPrefs.getInt("userId", -1);
+        String userIdStr = userPrefs.getString("userId", "-1");
+        int userId = Integer.parseInt(userIdStr);
 
         if (userId != -1) {
             int steps = Integer.parseInt(textView_steps.getText().toString());
