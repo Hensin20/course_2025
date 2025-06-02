@@ -85,13 +85,4 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/view23"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:elevation="9dp"
-        android:background="@color/main_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

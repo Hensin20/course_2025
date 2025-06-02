@@ -1,5 +1,6 @@
 package com.example.project1;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,6 +9,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -76,7 +80,7 @@ public class Activity_registration extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, IOException e) {  // ⬅ Додано реалізацію onFailure
                 runOnUiThread(() -> {
                     Log.e("Register", "Помилка запиту: " + e.getMessage());
                     Toast.makeText(Activity_registration.this, "⚠ Помилка підключення", Toast.LENGTH_SHORT).show();

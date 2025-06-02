@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:hint="Назва уроку"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/editTextVideoUrl"
+        android:hint="URL відео"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/editTextDuration"
+        android:hint="Тривалість (сек)"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonSelectImage"
+        android:text="Вибрати прев’ю"
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/Button_reg_log"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonSaveExercise"
+        android:text="Зберегти урок"
+        android:backgroundTint="@color/Button_reg_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

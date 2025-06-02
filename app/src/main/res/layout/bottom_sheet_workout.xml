@@ -1,44 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!-- Назва тренування -->
+    <EditText
+        android:id="@+id/editTextWorkoutTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:hint="🔹 Назва тренування"
+        android:textSize="16sp"
+        android:padding="10dp"/>
 
-        <EditText
-            android:id="@+id/editTextWorkoutTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Назва тренування"
-            android:minHeight="48dp" />
+    <!-- Опис тренування -->
+    <EditText
+        android:id="@+id/editTextWorkoutDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="📄 Опис тренування"
+        android:textSize="16sp"
+        android:padding="10dp"/>
 
-        <EditText
-            android:id="@+id/editTextWorkoutDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Опис тренування"
-            android:minHeight="48dp" />
+    <!-- Тривалість -->
+    <EditText
+        android:id="@+id/editTextWorkoutDuration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="⏳ Тривалість"
+        android:textSize="16sp"
+        android:padding="10dp"/>
 
-        <Button
-            android:id="@+id/buttonSelectImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="📸 Обрати фото" />
+    <!-- Вправи -->
+    <EditText
+        android:id="@+id/editTextWorkoutExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="🏋️ Вправи"
+        android:textSize="16sp"
+        android:padding="10dp"/>
 
-        <Button
-            android:id="@+id/buttonSaveWorkout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="✅ Зберегти тренування" />
-    </LinearLayout>
+    <!-- Кнопка вибору фото -->
+    <Button
+        android:id="@+id/buttonSelectImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📸 Вибрати фото"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:backgroundTint="@color/Button_reg_log"/>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Кнопка збереження -->
+    <Button
+        android:id="@+id/buttonSaveWorkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="✅ Зберегти тренування"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:backgroundTint="@color/Button_reg_log"/>
+</LinearLayout>

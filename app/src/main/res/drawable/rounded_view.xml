@@ -5,8 +5,8 @@
         android:type="linear"
         android:angle="135"
         android:startColor="#1A1A1A"
-        android:centerColor="#002240"
-        android:endColor="#1A1A1A"
+        android:centerColor="#1A1A1A"
+        android:endColor="#002240"
         android:centerX="0.5"
         android:centerY="0.5"/>
 
