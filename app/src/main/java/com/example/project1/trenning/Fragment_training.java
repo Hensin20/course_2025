@@ -64,7 +64,7 @@ public class Fragment_training extends Fragment {
 
         recyclerView = view.findViewById(R.id.list_category);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new WorkoutAdapter(workouts);
+        adapter = new WorkoutAdapter(workouts, getContext()); // Додаємо context
         recyclerView.setAdapter(adapter);
         button_add = view.findViewById(R.id.button_add);
 

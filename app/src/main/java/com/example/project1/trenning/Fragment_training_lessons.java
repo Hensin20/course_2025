@@ -142,6 +142,7 @@ public class Fragment_training_lessons extends Fragment {
 
         btnSelectImage.setOnClickListener(v -> selectImage());
 
+
         btnSave.setOnClickListener(v -> {
             String title = edtTitle.getText().toString().trim();
             String videoUrl = edtVideoUrl.getText().toString().trim();
@@ -257,6 +258,7 @@ public class Fragment_training_lessons extends Fragment {
         }
         return result;
     }
+
 
     private void uploadExercise(String title, String videoUrl, String durationSec, String previewImageUrl, String workoutId) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
