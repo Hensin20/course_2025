@@ -1,14 +1,14 @@
 package com.example.project1.trenning;
 
 public class Exercise {
-    private int exerciseId;
+    private String exerciseId;
     private int workoutId;
     private String title;
     private String videoUrl;
     private String durationSeconds;
     private String previewImageUrl;
 
-    public Exercise(int exerciseId, int workoutId, String title, String videoUrl, String durationSeconds, String previewImageUrl) {
+    public Exercise(String exerciseId, int workoutId, String title, String videoUrl, String durationSeconds, String previewImageUrl) {
         this.exerciseId = exerciseId;
         this.workoutId = workoutId;
         this.title = title;
@@ -17,11 +17,11 @@ public class Exercise {
         this.previewImageUrl = previewImageUrl;
     }
 
-    public int getExerciseId() {
+    public String getExerciseId() {
         return exerciseId;
     }
 
-    public void setExerciseId(int exerciseId) {
+    public void setExerciseId(String exerciseId) {
         this.exerciseId = exerciseId;
     }
 

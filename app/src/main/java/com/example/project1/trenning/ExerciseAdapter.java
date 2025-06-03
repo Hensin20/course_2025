@@ -31,7 +31,10 @@ import okhttp3.Response;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
     private final List<Exercise> exercises;
     private final Context context;
-    private final OkHttpClient client = new OkHttpClient(); // Додаємо OkHttpClient
+    private final Fragment_training_lessons fragmentTrainingLessons; // ✅ Додаємо фрагмент
+    private final OkHttpClient client = new OkHttpClient();
+
+
 
     public interface OnExerciseClickListener {
         void onExerciseClick(Exercise exercise);
@@ -39,10 +42,12 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
 
     private OnExerciseClickListener clickListener;
 
-    public ExerciseAdapter(List<Exercise> exercises, Context context) {
+    public ExerciseAdapter(List<Exercise> exercises, Context context, Fragment_training_lessons fragmentTrainingLessons) {
         this.exercises = exercises;
         this.context = context;
+        this.fragmentTrainingLessons = fragmentTrainingLessons; // ✅ Передаємо фрагмент
     }
+
 
     public void setClickListener(OnExerciseClickListener listener) {
         this.clickListener = listener;
@@ -54,36 +59,35 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         View view = LayoutInflater.from(context).inflate(R.layout.vlewholder_exercise, parent, false);
         return new ExerciseViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position) {
         Exercise exercise = exercises.get(position);
         holder.title.setText(exercise.getTitle());
         holder.duration.setText(exercise.getDurationSeconds());
 
-        // Перевіряємо, чи є зображення
+        // ✅ Відображення зображення
         if (exercise.getPreviewImageUrl() != null && !exercise.getPreviewImageUrl().isEmpty()) {
-            Log.d("ExerciseAdapter", "✅ Отримано PreviewImageUrl: " + exercise.getPreviewImageUrl());
             Glide.with(context)
-                    .load(ApiClient.BASE_URL + "/images/" + exercise.getPreviewImageUrl()) // Додаємо коректний шлях
+                    .load(ApiClient.BASE_URL + "/images/" + exercise.getPreviewImageUrl())
                     .placeholder(R.drawable.kardio)
                     .into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.kardio);
         }
 
-        // Відкриття відео
-        holder.image_play.setOnClickListener(v -> {
-            if (clickListener != null) {
-                clickListener.onExerciseClick(exercise);
-            }
+        // ✅ Видалення вправи
+        holder.imageViewTrash.setOnClickListener(v -> {
+            deleteExercise(String.valueOf(exercise.getExerciseId()), position);
         });
 
-        // Видалення вправи
-        holder.imageViewTrash.setOnClickListener(v -> {
-            deleteExercise(String.valueOf(exercise.getExerciseId()), position); // Перетворюємо в рядок
+        // ✅ Редагування вправи
+        holder.imageView_edit.setOnClickListener(v -> {
+            fragmentTrainingLessons.showAddExerciseDialog(exercise); // ✅ Викликаємо метод фрагмента
         });
+
     }
+
+
 
     private void deleteExercise(String exerciseId, int position) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -131,7 +135,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     }
 
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
-        ImageView image, image_play, imageViewTrash;
+        ImageView image, image_play, imageViewTrash, imageView_edit;
         TextView title, duration;
 
         public ExerciseViewHolder(@NonNull View itemView) {
@@ -141,6 +145,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
             duration = itemView.findViewById(R.id.durationText);
             image_play = itemView.findViewById(R.id.imageView_play);
             imageViewTrash = itemView.findViewById(R.id.imageView_trash);
+            imageView_edit = itemView.findViewById(R.id.imageView_edit);
+
         }
     }
 }

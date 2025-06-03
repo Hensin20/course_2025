@@ -32,7 +32,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     private final Context context;
     private final OkHttpClient client = new OkHttpClient(); // ✅ Додано OkHttpClient
     private OnCategoryClickListener onCategoryClickListener;
-
+    private OnWorkoutEditListener editListener;
     public WorkoutAdapter(List<Workout> workouts, Context context) {
         this.workouts = workouts;
         this.context = context;
@@ -44,6 +44,10 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.vlewholder_worktout, parent, false);
         return new WorkoutViewHolder(view);
+    }
+
+    public void setOnWorkoutEditListener(OnWorkoutEditListener listener) {
+        this.editListener = listener;
     }
 
     @Override
@@ -70,6 +74,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         holder.ivDeleteCategory.setOnClickListener(v -> {
             deleteCategory(Integer.parseInt(workout.getWorkoutId()), position); // ✅ Перетворюємо рядок у число
 
+        });
+
+        holder.ivEditCategory.setOnClickListener(v -> {
+            if (editListener != null) {
+                editListener.onEditWorkout(workout); // ✅ викликає метод фрагмента
+            }
         });
     }
 
@@ -110,7 +120,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivWorkout, ivDeleteCategory;
+        ImageView ivWorkout, ivDeleteCategory, ivEditCategory;
         TextView tvTitle, tvDuration, tvExercise;
 
         public WorkoutViewHolder(@NonNull View itemView) {
@@ -119,13 +129,17 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             tvTitle = itemView.findViewById(R.id.titleText);
             tvDuration = itemView.findViewById(R.id.durationText);
             tvExercise = itemView.findViewById(R.id.excerciseText);
-            ivDeleteCategory = itemView.findViewById(R.id.imageView_trash); // ✅ Виправлено ID кнопки
+            ivDeleteCategory = itemView.findViewById(R.id.imageView_trash);
+            ivEditCategory = itemView.findViewById(R.id.imageView_edit);
         }
     }
 
     // ✅ Інтерфейс для кліків
     public interface OnCategoryClickListener {
         void onCategoryClick(Workout workout);
+    }
+    public interface OnWorkoutEditListener {
+        void onEditWorkout(Workout workout);
     }
 
     public void setOnCategoryClickListener(OnCategoryClickListener listener) {

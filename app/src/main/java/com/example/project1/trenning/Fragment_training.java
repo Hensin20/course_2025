@@ -63,12 +63,16 @@ public class Fragment_training extends Fragment {
         View view = inflater.inflate(R.layout.fragment_training, container, false);
 
         recyclerView = view.findViewById(R.id.list_category);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new WorkoutAdapter(workouts, getContext()); // Додаємо context
-        recyclerView.setAdapter(adapter);
-        button_add = view.findViewById(R.id.button_add);
 
-        button_add.setOnClickListener(v -> showWorkoutDialog());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new WorkoutAdapter(workouts, getContext()); // 🔧 Замість workoutList
+        adapter.setOnWorkoutEditListener(workout -> {
+            showWorkoutDialog(workout);
+        });
+        recyclerView.setAdapter(adapter);
+
+        button_add = view.findViewById(R.id.button_add);
+        button_add.setOnClickListener(v -> showWorkoutDialog(null));
 
         adapter.setOnCategoryClickListener(workout -> {
             if (isAdded()) {
@@ -76,6 +80,7 @@ public class Fragment_training extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("workoutId", workout.getWorkoutId());
                 bundle.putString("title", workout.getTitle());
+                bundle.putString("description", workout.getDescription());
                 bundle.putString("duration", workout.getDurationAll());
                 bundle.putString("exercise", workout.getExercise());
                 bundle.putString("imagePath", workout.getPicPath());
@@ -91,7 +96,7 @@ public class Fragment_training extends Fragment {
         return view;
     }
 
-    private void showWorkoutDialog() {
+    private void showWorkoutDialog(Workout workout) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_workout, null);
         bottomSheetDialog.setContentView(view);
@@ -102,6 +107,14 @@ public class Fragment_training extends Fragment {
         EditText editTextExercise = view.findViewById(R.id.editTextWorkoutExercise);
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         Button buttonSaveWorkout = view.findViewById(R.id.buttonSaveWorkout);
+
+        // ✅ Заповнюємо поля, якщо Workout переданий
+        if (workout != null) {
+            editTextTitle.setText(workout.getTitle());
+            editTextDescription.setText(workout.getDescription());
+            editTextDuration.setText(workout.getDurationAll());
+            editTextExercise.setText(workout.getExercise());
+        }
 
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
@@ -116,17 +129,52 @@ public class Fragment_training extends Fragment {
                 return;
             }
 
-            if (uploadedImageName != null) {
-                uploadWorkout(title, description, duration, exercise, uploadedImageName);
+            if (workout != null) {
+                updateWorkout(workout.getWorkoutId(), title, description, duration, exercise, uploadedImageName);
             } else {
-                Toast.makeText(getContext(), "Зачекай, поки зображення завантажиться!", Toast.LENGTH_SHORT).show();
+                if (uploadedImageName != null) {
+                    uploadWorkout(title, description, duration, exercise, uploadedImageName);
+                } else {
+                    Toast.makeText(getContext(), "Зачекай, поки зображення завантажиться!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             bottomSheetDialog.dismiss();
         });
 
-
         bottomSheetDialog.show();
+    }
+
+    private void updateWorkout(String workoutId, String title, String description, String duration, String exercise, String imageName) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String json = "{\"workoutId\":\"" + workoutId + "\", \"title\":\"" + title + "\", \"description\":\"" + description +
+                "\", \"durationAll\":\"" + duration + "\", \"exercise\":\"" + exercise + "\", \"picPath\":\"" + imageName + "\"}";
+
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(ApiClient.BASE_URL + "/api/workouts/editWorkout")
+                .put(body) // ✅ Використовуємо PUT для редагування
+                .addHeader("Accept", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                requireActivity().runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "✅ Тренування оновлено!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "❌ Помилка оновлення!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "⚠ Помилка мережі!", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void selectImage() {

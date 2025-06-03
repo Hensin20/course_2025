@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Workout {
     private String workoutId;
     private String title;
+    private String Description;
     private String exercise;
     private String picPath;
     private String durationAll;
@@ -20,7 +21,9 @@ public class Workout {
     }
 
     public String getWorkoutId() {return workoutId;}
+
     public String getTitle() { return title; }
+    public String getDescription() {return Description;}
     public String getPicPath() { return picPath; }
     public String getExercise() {return exercise;}
     public String getDurationAll() { return durationAll; }

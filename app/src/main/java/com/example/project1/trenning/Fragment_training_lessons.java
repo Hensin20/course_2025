@@ -86,7 +86,7 @@ public class Fragment_training_lessons extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trening_lessons, container, false);
 
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton_add);
-        fab.setOnClickListener(v -> showAddExerciseDialog());
+        fab.setOnClickListener(v -> showAddExerciseDialog(null));
 
         tvTitle = view.findViewById(R.id.titleText);
         tvDurations = view.findViewById(R.id.durationText);
@@ -104,7 +104,8 @@ public class Fragment_training_lessons extends Fragment {
                 .into(imageView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        exerciseAdapter = new ExerciseAdapter(exerciseList, requireContext());
+        exerciseAdapter = new ExerciseAdapter(exerciseList, requireContext(), this); // ✅ Передаємо фрагмент
+
         recyclerView.setAdapter(exerciseAdapter);
 
         exerciseAdapter.setClickListener(exercise -> {
@@ -128,10 +129,9 @@ public class Fragment_training_lessons extends Fragment {
         return view;
     }
 
-    private void showAddExerciseDialog() {
-        Log.i("showAddExerciseDialog", "Виклик");
-        dialog = new BottomSheetDialog(requireContext());
-        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_exercise, null);
+    public void showAddExerciseDialog(Exercise exercise) {
+        dialog = new BottomSheetDialog(getContext());
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_exercise, null);
         dialog.setContentView(sheetView);
 
         edtTitle = sheetView.findViewById(R.id.editTextTitle);
@@ -142,28 +142,41 @@ public class Fragment_training_lessons extends Fragment {
 
         btnSelectImage.setOnClickListener(v -> selectImage());
 
+        // ✅ Якщо exercise == null, це новий урок, інакше заповнюємо поля для редагування
+        if (exercise != null) {
+            edtTitle.setText(exercise.getTitle());
+            edtVideoUrl.setText(exercise.getVideoUrl());
+            edtDuration.setText(exercise.getDurationSeconds());
+            uploadedImageName = exercise.getPreviewImageUrl();
+        }
 
         btnSave.setOnClickListener(v -> {
             String title = edtTitle.getText().toString().trim();
-            String videoUrl = edtVideoUrl.getText().toString().trim();
             String duration = edtDuration.getText().toString().trim();
+            String videoUrl = edtVideoUrl.getText().toString().trim();
 
-            if (title.isEmpty() || videoUrl.isEmpty()) {
-                Toast.makeText(getContext(), "Заповніть усі обов'язкові поля", Toast.LENGTH_SHORT).show();
+            if (title.isEmpty() || duration.isEmpty() || videoUrl.isEmpty()) {
+                Toast.makeText(getContext(), "❗Заповніть всі поля!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (uploadedImageName != null && workoutId != null) {
-                String imageWithExt = uploadedImageName + ".png";
-                uploadExercise(title, videoUrl, duration, imageWithExt, workoutId);
-                dialog.dismiss();
-            } else {
-                Toast.makeText(getContext(), "Будь ласка, виберіть зображення", Toast.LENGTH_SHORT).show();
+            if (uploadedImageName == null) {
+                Toast.makeText(getContext(), "⏳ Завантажте зображення!", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (exercise != null) {
+                updateExercise(exercise.getExerciseId(), title, videoUrl, duration, uploadedImageName); // ✅ Викликаємо редагування
+            } else {
+                uploadExercise(title, videoUrl, duration, uploadedImageName, workoutId); // ✅ Додаємо новий урок
+            }
+
+            dialog.dismiss();
         });
 
         dialog.show();
     }
+
 
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -259,7 +272,6 @@ public class Fragment_training_lessons extends Fragment {
         return result;
     }
 
-
     private void uploadExercise(String title, String videoUrl, String durationSec, String previewImageUrl, String workoutId) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -268,31 +280,31 @@ public class Fragment_training_lessons extends Fragment {
                 "\"videoUrl\":\"" + videoUrl + "\"," +
                 "\"durationSeconds\":\"" + durationSec + "\"," +
                 "\"previewImageUrl\":\"" + previewImageUrl + "\"," +
-                "\"workoutId\":\"" + workoutId + "\"" + // ✅ Додано правильне закриття лапок
+                "\"workoutId\":\"" + workoutId + "\"" +
                 "}";
 
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
-                .url(ApiClient.BASE_URL + "/api/workouts/addExercise")
+                .url(ApiClient.BASE_URL + "/api/workouts/addExercise") // ✅ Використовуємо POST для створення нового уроку
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
+            @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 requireActivity().runOnUiThread(() -> {
                     if (response.isSuccessful()) {
                         Toast.makeText(getContext(), "✅ Урок додано!", Toast.LENGTH_SHORT).show();
-                        fetchExercises();
+                        fetchExercises(); // ✅ Оновлення списку після додавання
                     } else {
-                        Log.d("UPLOAD_EXERCISE", "JSON: " + json);
-                        Log.e("UPLOAD_ERROR", "Response code: " + response.code());
-
-                        Toast.makeText(getContext(), "❌ Помилка додавання!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "❌ Помилка при додаванні уроку!", Toast.LENGTH_SHORT).show();
+                        Log.e("uploadExercise", "Код: " + response.code());
                     }
                 });
             }
 
+            @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 requireActivity().runOnUiThread(() ->
                         Toast.makeText(getContext(), "⚠ Помилка мережі!", Toast.LENGTH_SHORT).show()
@@ -300,6 +312,50 @@ public class Fragment_training_lessons extends Fragment {
             }
         });
     }
+
+
+    private void updateExercise(String exerciseId, String title, String videoUrl, String durationSec, String previewImageUrl) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        String json = "{" +
+                "\"exerciseId\":\"" + exerciseId + "\"," +
+                "\"title\":\"" + title + "\"," +
+                "\"videoUrl\":\"" + videoUrl + "\"," +
+                "\"durationSeconds\":\"" + durationSec + "\"," +
+                "\"previewImageUrl\":\"" + previewImageUrl + "\"" +
+                "}";
+
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(ApiClient.BASE_URL + "/api/workouts/updateExercise") // ✅ Використовуємо PUT
+                .put(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                requireActivity().runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "✅ Урок оновлено!", Toast.LENGTH_SHORT).show();
+                        fetchExercises(); // ✅ Оновлення списку після змін
+                    } else {
+                        Toast.makeText(getContext(), "❌ Помилка редагування!", Toast.LENGTH_SHORT).show();
+                        Log.e("updateExercise", "Код: " + response.code());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "⚠ Помилка мережі!", Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
+
 
     private void fetchExercises() {
         String url = ApiClient.BASE_URL + "/api/workouts/" + workoutId + "/exercises";
