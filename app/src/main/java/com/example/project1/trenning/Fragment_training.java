@@ -1,8 +1,11 @@
 
 package com.example.project1.trenning;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -73,6 +76,14 @@ public class Fragment_training extends Fragment {
 
         button_add = view.findViewById(R.id.button_add);
         button_add.setOnClickListener(v -> showWorkoutDialog(null));
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль
+        if(!userRole.equals("admin")){
+            button_add.setVisibility(View.GONE);
+        } else {
+            button_add.setVisibility(View.VISIBLE);
+        }
 
         adapter.setOnCategoryClickListener(workout -> {
             if (isAdded()) {

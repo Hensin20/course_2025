@@ -1,7 +1,10 @@
 package com.example.project1.trenning;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +55,17 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
+
+        SharedPreferences prefs = context.getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль
+        if(!userRole.equals("admin")){
+            holder.ivDeleteCategory.setVisibility(View.GONE);
+            holder.ivEditCategory.setVisibility(View.GONE);
+        } else {
+            holder.ivDeleteCategory.setVisibility(View.VISIBLE);
+            holder.ivDeleteCategory.setVisibility(View.VISIBLE);
+        }
+
         Workout workout = workouts.get(position);
         holder.tvTitle.setText(workout.getTitle());
         holder.tvDuration.setText(workout.getDurationAll());

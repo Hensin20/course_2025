@@ -1,7 +1,11 @@
 package com.example.project1.trenning;
 
+import static android.content.Context.MODE_PRIVATE;
+import static java.security.AccessController.getContext;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +63,23 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         View view = LayoutInflater.from(context).inflate(R.layout.vlewholder_exercise, parent, false);
         return new ExerciseViewHolder(view);
     }
+
+
+
     @Override
     public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position) {
+
+        SharedPreferences prefs = context.getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль користувача
+
+        if (!userRole.equals("admin")) {
+            holder.imageViewTrash.setVisibility(View.GONE);
+            holder.imageView_edit.setVisibility(View.GONE);
+        } else {
+            holder.imageViewTrash.setVisibility(View.VISIBLE);
+            holder.imageView_edit.setVisibility(View.VISIBLE);
+        }
+
         Exercise exercise = exercises.get(position);
         holder.title.setText(exercise.getTitle());
         holder.duration.setText(exercise.getDurationSeconds());

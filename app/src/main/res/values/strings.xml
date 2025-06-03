@@ -7,6 +7,7 @@
     <string name="TextPassword_2">Введіть повторно пороль </string>
     <string name="Button_login">Увійти </string>
     <string name="Button_registration">Зареєструватися </string>
+    <string name="Button_list_event">Список евентів </string>
     <string name="imeg_button_trening">Задачі </string>
     <string name="imeg_button_shedule">Розклад </string>
     <string name="imeg_button_profile">Профіль </string>

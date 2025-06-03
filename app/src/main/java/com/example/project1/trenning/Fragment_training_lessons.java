@@ -1,7 +1,10 @@
 package com.example.project1.trenning;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -93,6 +96,14 @@ public class Fragment_training_lessons extends Fragment {
         tvExcercise = view.findViewById(R.id.excerciseText);
         imageView = view.findViewById(R.id.imageView_pic);
         recyclerView = view.findViewById(R.id.list_lesson);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль
+        if(!userRole.equals("admin")){
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
 
         tvTitle.setText(title);
         tvDurations.setText(duration);

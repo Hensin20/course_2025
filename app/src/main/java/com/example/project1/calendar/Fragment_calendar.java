@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project1.ApiClient;
 import com.example.project1.R;
@@ -45,8 +46,21 @@ public class Fragment_calendar extends Fragment {
 
         calendarView = view.findViewById(R.id.calendarView);
         FloatingActionButton fab = view.findViewById(R.id.floatingActionButton);
+        Button buttonListEvent = view.findViewById(R.id.button_list_event);
 
-        fab.setOnClickListener(v -> showEventDialog());
+        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль
+        if(!userRole.equals("admin")){
+            buttonListEvent.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
+
+        } else {
+            buttonListEvent.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
+        }
+
+        fab.setOnClickListener(v -> showEventDialog(null));
+        buttonListEvent.setOnClickListener(v -> fetchEventsForBottomSheet());
 
         calendarView.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
             String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
@@ -55,8 +69,38 @@ public class Fragment_calendar extends Fragment {
 
         return view;
     }
+    // ✅ Видалення події
+    public void deleteEvent(int eventId, int position, RecyclerView.Adapter<?> adapter, List<EventModel> events) {
+        String url = ApiClient.BASE_URL + "/api/events/delete-event/" + eventId;
 
-    private void showEventDialog() {
+        Request request = new Request.Builder().url(url).delete().build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                requireActivity().runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "✅ Подію видалено!", Toast.LENGTH_SHORT).show();
+                        events.remove(position);
+                        adapter.notifyItemRemoved(position);
+                    } else {
+                        Toast.makeText(getContext(), "❌ Помилка видалення!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "⚠ Помилка мережі!", Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+    public void editEvent(EventModel event) {
+        showEventDialog(event); // Викликаємо `showEventDialog()` з переданими даними
+    }
+
+    private void showEventDialog(EventModel event) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_event, null);
         bottomSheetDialog.setContentView(view);
@@ -65,6 +109,13 @@ public class Fragment_calendar extends Fragment {
         EditText editTextDate = view.findViewById(R.id.editTextDate);
         EditText editTextTime = view.findViewById(R.id.editTextTime);
         Button buttonSaveEvent = view.findViewById(R.id.buttonSaveEvent);
+
+        // ✅ Якщо event != null, заповнюємо поля для редагування
+        if (event != null) {
+            editTextEventName.setText(event.getTitle());
+            editTextDate.setText(event.getEventDate());
+            editTextTime.setText(event.getEventTime());
+        }
 
         buttonSaveEvent.setOnClickListener(v -> {
             String eventName = editTextEventName.getText().toString().trim();
@@ -75,15 +126,100 @@ public class Fragment_calendar extends Fragment {
                 Toast.makeText(getContext(), "Заповніть всі поля!", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
             String token = prefs.getString("jwt_token", "user");
 
-            saveEvent(eventName, date, time, token);
+            if (event != null) {
+                updateEvent(event.getId(), eventName, date, time, token); // ✅ Викликаємо оновлення
+            } else {
+                saveEvent(eventName, date, time, token); // ✅ Додаємо нову подію
+            }
+
             bottomSheetDialog.dismiss();
         });
 
+
         bottomSheetDialog.show();
     }
+    public void updateEvent(int eventId, String title, String eventDate, String eventTime, String token) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String json = "{\"id\":" + eventId + ",\"title\":\"" + title + "\",\"eventDate\":\"" + eventDate + "\",\"eventTime\":\"" + eventTime + "\"}";
+
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(ApiClient.BASE_URL + "/api/events/update-event") // ✅ Використовуємо PUT для оновлення
+                .put(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                requireActivity().runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "✅ Подію оновлено!", Toast.LENGTH_SHORT).show();
+                        fetchEventsForBottomSheet(); // ✅ Оновлення списку
+                    } else {
+                        Toast.makeText(getContext(), "❌ Помилка оновлення!", Toast.LENGTH_SHORT).show();
+                        Log.e("updateEvent", "Код: " + response.code());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "⚠ Помилка мережі!", Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
+
+
+    private void fetchEventsForBottomSheet() {
+        String url = ApiClient.BASE_URL + "/api/events/all"; // ✅ Запитуємо всі події
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    List<EventModel> events = new Gson().fromJson(responseBody,
+                            new TypeToken<List<EventModel>>(){}.getType());
+
+                    if (getActivity() != null && isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            ScheduleBottomSheet bottomSheet = ScheduleBottomSheet.newInstance("Усі події", events, Fragment_calendar.this);
+
+
+                            bottomSheet.show(getParentFragmentManager(), "ScheduleBottomSheet");
+                        });
+                    }
+                } else {
+                    Log.e("API_ERROR", "Помилка сервера: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("API_ERROR", "Мережева помилка: " + e.getMessage());
+                if (getActivity() != null && isAdded()) {
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Помилка завантаження подій", Toast.LENGTH_SHORT).show()
+                    );
+                }
+            }
+        });
+    }
+
 
     private void saveEvent(String name, String date, String time, String token) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -142,7 +278,7 @@ public class Fragment_calendar extends Fragment {
 
                     if (getActivity() != null && isAdded()) {
                         requireActivity().runOnUiThread(() -> {
-                            ScheduleBottomSheet bottomSheet = ScheduleBottomSheet.newInstance(date, events);
+                            ScheduleBottomSheet bottomSheet = ScheduleBottomSheet.newInstance(date, events, Fragment_calendar.this);
                             bottomSheet.show(getParentFragmentManager(), "ScheduleBottomSheet");
                         });
                     }
