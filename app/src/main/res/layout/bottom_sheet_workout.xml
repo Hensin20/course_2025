@@ -46,7 +46,7 @@
         android:id="@+id/buttonSelectImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="📸 Вибрати фото"
+        android:text="Вибрати фото"
         android:textSize="16sp"
         android:padding="10dp"
         android:backgroundTint="@color/Button_reg_log"/>
@@ -56,7 +56,7 @@
         android:id="@+id/buttonSaveWorkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="✅ Зберегти тренування"
+        android:text="Зберегти тренування"
         android:textSize="16sp"
         android:padding="10dp"
         android:backgroundTint="@color/Button_reg_log"/>

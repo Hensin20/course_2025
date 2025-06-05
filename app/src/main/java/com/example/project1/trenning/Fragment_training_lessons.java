@@ -57,8 +57,8 @@ public class Fragment_training_lessons extends Fragment {
 
     private ExerciseAdapter exerciseAdapter;
     private List<Exercise> exerciseList = new ArrayList<>();
-    private String workoutId, title, duration, exercise, imagePath;
-    private TextView tvTitle, tvDurations, tvExcercise;
+    private String workoutId, title, description, duration, exercise, imagePath;
+    private TextView tvTitle, tvDescription, tvDurations, tvExcercise;
     private RecyclerView recyclerView;
     private ImageView imageView;
     private String uploadedImageName = null;
@@ -76,6 +76,7 @@ public class Fragment_training_lessons extends Fragment {
             workoutId = getArguments().getString("workoutId");
             Log.e("Fragment_training_lessons", "отримано workoutId" + workoutId);
             title = getArguments().getString("title");
+            description = getArguments().getString("description");
             duration = getArguments().getString("duration");
             exercise = getArguments().getString("exercise");
             imagePath = getArguments().getString("imagePath");
@@ -88,10 +89,11 @@ public class Fragment_training_lessons extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_trening_lessons, container, false);
 
-        FloatingActionButton fab = view.findViewById(R.id.floatingActionButton_add);
-        fab.setOnClickListener(v -> showAddExerciseDialog(null));
+        Button button_add_lessons = view.findViewById(R.id.button_add_lessons);
+        button_add_lessons.setOnClickListener(v -> showAddExerciseDialog(null));
 
         tvTitle = view.findViewById(R.id.titleText);
+        tvDescription = view.findViewById(R.id.excercise_Text);
         tvDurations = view.findViewById(R.id.durationText);
         tvExcercise = view.findViewById(R.id.excerciseText);
         imageView = view.findViewById(R.id.imageView_pic);
@@ -100,12 +102,13 @@ public class Fragment_training_lessons extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
         String userRole = prefs.getString("userRole", "user"); // ✅ Отримуємо роль
         if(!userRole.equals("admin")){
-            fab.setVisibility(View.GONE);
+            button_add_lessons.setVisibility(View.GONE);
         } else {
-            fab.setVisibility(View.VISIBLE);
+            button_add_lessons.setVisibility(View.VISIBLE);
         }
 
         tvTitle.setText(title);
+        tvDescription.setText(description);
         tvDurations.setText(duration);
         tvExcercise.setText(exercise);
 

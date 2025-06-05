@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 
 import org.json.JSONException;
@@ -32,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Callback;
@@ -53,7 +56,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     private int praviewsTotalStep = 0;
     private ImageButton imageButton_status, imageButton_achievement;
     private TextView textView_steps, textView_calories, textView_distance;
-
+    private OkHttpClient client = new OkHttpClient();
 
     @Nullable
     @Override
@@ -62,7 +65,6 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         barChart = view.findViewById(R.id.barChart);
-
         textView_steps = view.findViewById(R.id.textView_steps_count);
         textView_calories = view.findViewById(R.id.textView_calories_count);
         textView_distance = view.findViewById(R.id.textView_distance_count);
@@ -70,27 +72,56 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        int[] stepsPerDay = {5000, 7000, 4000, 8000, 6000, 3000, 10000};
+        // ✅ Отримати статистику за останні 7 днів при завантаженні фрагмента
+        fetchLast7DaysStats();
 
-        SetupChart.setupChart(barChart,requireContext(),stepsPerDay);
-
-        SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", MODE_PRIVATE);
-        String userIdStr = prefs.getString("userId", "-1");
-        int userId = Integer.parseInt(userIdStr);  // або Integer.valueOf(...)
-
-
-        if(userId != -1){
-            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        }
-
-        imageButton_status.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendStats();
-            }
-        });
+        imageButton_status.setOnClickListener(v -> sendStats());
 
         return view;
+    }
+    private void fetchLast7DaysStats() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("userPrefs", MODE_PRIVATE);
+        String userIdStr = prefs.getString("userId", "-1");
+        int userId = Integer.parseInt(userIdStr);
+
+        if (userId == -1) {
+            Toast.makeText(getContext(), "❌ Помилка: ID користувача не знайдено!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = ApiClient.BASE_URL + "/api/auth/stats/last7days/" + userId;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    List<UserStatsModel> stats = new Gson().fromJson(responseBody, new TypeToken<List<UserStatsModel>>(){}.getType());
+
+                    requireActivity().runOnUiThread(() -> updateChart(stats)); // ✅ Оновлення графіка
+                } else {
+                    Log.e("API_ERROR", "Помилка сервера: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("API_ERROR", "Мережева помилка: " + e.getMessage());
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "Помилка завантаження статистики", Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
+    private void updateChart(List<UserStatsModel> stats) {
+        SetupChart.setupChart(barChart, requireContext(), stats); // ✅ Передаємо статистику із сервера
     }
 
 
@@ -145,6 +176,7 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
             Toast.makeText(requireContext(), "❌ Помилка: ID користувача не знайдено!", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void resetDailyStats() {
         praviewsTotalStep = 0;
         textView_steps.setText("0");
@@ -216,6 +248,8 @@ public class Fragment_profile extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Це можна залишити пустим, якщо не потрібно
     }
+
+
 
     private void uploadStats(int userId, int steps, float calories, float distanceKm, String date) {
         OkHttpClient client = new OkHttpClient();

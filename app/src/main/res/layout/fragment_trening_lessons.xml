@@ -65,6 +65,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/button_add_lessons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    style="@style/AppTheme"
+                    android:backgroundTint="@color/Button_reg_log"
+                    android:text="@string/lessons_add" />
+
+                <TextView
+                    android:id="@+id/excercise_Text"
+                    style="@style/AppTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="Description"
+                    android:textColor="@color/main_text_lite"
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/titleText"
                     android:layout_width="wrap_content"
@@ -75,17 +96,6 @@
                     android:text="Title"
                     android:textSize="26sp" />
 
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/lessons_add"
-                    android:elevation="11dp"
-                    android:src="@drawable/icon_plus" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,7 +140,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/descriptionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"

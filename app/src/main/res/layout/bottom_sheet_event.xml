@@ -39,7 +39,9 @@
             android:id="@+id/buttonSaveEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Зберегти подію" />
+            style="@style/AppTheme"
+            android:backgroundTint="@color/Button_reg_log"
+            android:text="@string/event_add" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
